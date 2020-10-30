@@ -2,6 +2,14 @@
 
 Forked from Luke Smith's LARBS.
 
+## Usage
+
+Run the following command *right after* a clean installation of arch linux.
+
+```
+sh ./main.sh
+```
+
 ## Customization
 
 By default, JARBS uses the programs [here in progs.csv](progs.csv) and installs
