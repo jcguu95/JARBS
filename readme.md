@@ -1,6 +1,4 @@
-# JARBS
-
-Forked from Luke Smith's LARBS.
+JARBS is a script forked from Luke Smith's LARBS.
 
 ## Usage
 
