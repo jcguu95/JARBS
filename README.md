@@ -1,32 +1,10 @@
-# Luke's Auto-Rice Bootstraping Scripts (LARBS)
+# Jin's Auto-Rice Bootstraping Scripts (JARBS)
 
-
-## Installation:
-
-On an Arch based distribution as root, run the following:
-
-```
-curl -LO larbs.xyz/larbs.sh
-sh larbs.sh
-```
-
-That's it.
-
-## What is LARBS?
-
-LARBS is a script that autoinstalls and autoconfigures a fully-functioning
-and minimal terminal-and-vim-based Arch Linux environment.
-
-LARBS was originally intended to be run on a fresh install of Arch Linux, and
-provides you with a fully configured diving-board for work or more
-customization. But LARBS also works on already configured systems *and* other
-Arch-based distros such as Manjaro and Parabola (although Parabola,
-which uses slightly different repositories might miss one or two minor
-programs).
+Forked from Luke Smith's LARBS.
 
 ## Customization
 
-By default, LARBS uses the programs [here in progs.csv](progs.csv) and installs
+By default, JARBS uses the programs [here in progs.csv](progs.csv) and installs
 [my dotfiles repo (voidrice) here](https://github.com/lukesmithxyz/voidrice),
 but you can easily change this by either modifying the default variables at the
 beginning of the script or giving the script one of these options:
