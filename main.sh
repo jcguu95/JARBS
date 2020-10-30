@@ -28,6 +28,8 @@ error() { clear; printf "ERROR:\\n%s\\n" "$1"; exit;}
 welcomemsg() { \
 	dialog --title "Welcome!" --msgbox "Welcome to Jin's Auto-Rice Bootstrapping Script!\\n\\nThis script is forked from Luke Smith's. It will automatically install a fully-featured Linux desktop, which I use as my main machine.\\n" 10 60
 
+	echo "Welcome to Jin's Auto-Rice Bootstrapping Script!\n\nThis script is forked from Luke Smith's. It will automatically install a fully-featured Linux desktop, which I use as my main machine.\n"; sleep 5
+
 	dialog --colors --title "Important Note!" --yes-label "All ready!" --no-label "Return..." --yesno "Be sure the computer you are using has current pacman updates and refreshed Arch keyrings.\\n\\nIf it does not, the installation of some programs might fail." 8 70
 	}
 
@@ -208,16 +210,16 @@ installationloop
 dialog --title "LARBS Installation" --infobox "Finally, installing \`libxft-bgra\` to enable color emoji in suckless software without crashes." 5 70
 yes | sudo -u "$name" $aurhelper -S libxft-bgra-git >/dev/null 2>&1
 
-# Install the dotfiles in the plug directory
-plugdir="/home/$name/.+PLUGS"
-tildedir="$plugdir/tilde-git"
-[ ! -d "$plugdir" ] && mkdir -p "$plugdir"
-[ ! -d "$tildedir" ] && mkdir -p "$tildedir"
-putgitrepo "$dotfilesrepo" "$tildedir" "$repobranch"
-rm -rf "$tildedir/readme.md" "$tildedir/.git" "$tildedir/.gitignore"
-for file in "$tildedir/*"; do
-	ln -sfv file "/home/$name"
-done
+## # Install the dotfiles in the plug directory
+## plugdir="/home/$name/.+PLUGS"
+## tildedir="$plugdir/tilde-git"
+## [ ! -d "$plugdir" ] && mkdir -p "$plugdir"
+## [ ! -d "$tildedir" ] && mkdir -p "$tildedir"
+## putgitrepo "$dotfilesrepo" "$tildedir" "$repobranch"
+## rm -rf "$tildedir/readme.md" "$tildedir/.git" "$tildedir/.gitignore"
+## for file in "$tildedir/*"; do ## ERROR: this does not expand as non-$user
+	## ln -sfv "$file" "/home/$name"
+## done
 
 # Most important command! Get rid of the beep!
 systembeepoff
