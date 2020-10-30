@@ -208,9 +208,16 @@ installationloop
 dialog --title "LARBS Installation" --infobox "Finally, installing \`libxft-bgra\` to enable color emoji in suckless software without crashes." 5 70
 yes | sudo -u "$name" $aurhelper -S libxft-bgra-git >/dev/null 2>&1
 
-# Install the dotfiles in the user's home directory
-putgitrepo "$dotfilesrepo" "/home/$name" "$repobranch"
-rm -rf "/home/$name/readme.md" "/home/$name/.git" "/home/$name/.gitignore"
+# Install the dotfiles in the plug directory
+plugdir="/home/$name/.+PLUGS"
+tildedir="$plugdir/tilde-git"
+[ ! -d "$plugdir" ] && mkdir -p "$plugdir"
+[ ! -d "$tildedir" ] && mkdir -p "$tildedir"
+putgitrepo "$dotfilesrepo" "$tildedir" "$repobranch"
+rm -rf "$tildedir/readme.md" "$tildedir/.git" "$tildedir/.gitignore"
+for file in "$tildedir/*"; do
+	ln -sfv file "/home/$name"
+done
 
 # Most important command! Get rid of the beep!
 systembeepoff
