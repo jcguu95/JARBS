@@ -14,10 +14,11 @@ while getopts ":a:r:b:p:h" o; do case "${o}" in
 	*) printf "Invalid option: -%s\\n" "$OPTARG" && exit ;;
 esac done
 
-[ -z "$dotfilesrepo" ] && dotfilesrepo="https://github.com/jcguu95/archrice.git" # TODO not uploaded yet
 [ -z "$progsfile" ] && progsfile="https://raw.githubusercontent.com/jcguu95/JARBS/master/progs.csv"
 [ -z "$aurhelper" ] && aurhelper="yay"
 [ -z "$repobranch" ] && repobranch="master"
+# TODO not uploaded yet. I'm doing this manually for now.
+[ -z "$dotfilesrepo" ] && dotfilesrepo="https://github.com/jcguu95/archrice.git"
 
 ### FUNCTIONS ###
 
@@ -208,11 +209,12 @@ installationloop
 dialog --title "LARBS Installation" --infobox "Finally, installing \`libxft-bgra\` to enable color emoji in suckless software without crashes." 5 70
 yes | sudo -u "$name" $aurhelper -S libxft-bgra-git >/dev/null 2>&1
 
-# Install the dotfiles in the user's home directory
-putgitrepo "$dotfilesrepo" "/home/$name" "$repobranch"
-rm -f "/home/$name/README.md" "/home/$name/LICENSE" "/home/$name/FUNDING.yml"
-# make git ignore deleted LICENSE & README.md files
-git update-index --assume-unchanged "/home/$name/README.md" "/home/$name/LICENSE" "/home/$name/FUNDING.yml"
+### (I do this manually.)
+## # Install the dotfiles in the user's home directory
+## putgitrepo "$dotfilesrepo" "/home/$name" "$repobranch"
+## rm -f "/home/$name/README.md" "/home/$name/LICENSE" "/home/$name/FUNDING.yml"
+## # make git ignore deleted LICENSE & README.md files
+## git update-index --assume-unchanged "/home/$name/README.md" "/home/$name/LICENSE" "/home/$name/FUNDING.yml"
 
 # Most important command! Get rid of the beep!
 systembeepoff
