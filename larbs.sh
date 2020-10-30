@@ -122,6 +122,7 @@ installationloop() { \
 			"A") aurinstall "$program" "$comment" ;;
 			"G") gitmakeinstall "$program" "$comment" ;;
 			"P") pipinstall "$program" "$comment" ;;
+			"I") ;;
 			*) maininstall "$program" "$comment" ;;
 		esac
 	done < /tmp/progs.csv ;}
