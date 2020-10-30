@@ -16,7 +16,7 @@ esac done
 
 [ -z "$progsfile" ] && progsfile="https://raw.githubusercontent.com/jcguu95/JARBS/master/aux/progs.csv"
 [ -z "$aurhelper" ] && aurhelper="yay"
-[ -z "$repobranch" ] && repobranch="master"
+[ -z "$repobranch" ] && repobranch="main"
 [ -z "$dotfilesrepo" ] && dotfilesrepo="https://github.com/jcguu95/tilde.git"
 
 ### FUNCTIONS ###
