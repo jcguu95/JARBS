@@ -1,3 +1,6 @@
+Jin's Auto-Rice Bootstrapping Script (JARBS) is a script forked from Luke
+Smith's LARBS.
+
 ## Customization
 
 By default, JARBS uses the programs [here in progs.csv](progs.csv) and installs
