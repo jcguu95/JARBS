@@ -62,31 +62,23 @@ A,mutt-wizard-git,is a light-weight terminal-based email system.
 ,noto-fonts-cjk,A font.
 ,adobe-source-han-sans-otc-fonts,A font.
 ,adobe-source-han-serif-otc-fonts,A font.
-,ibus,
-,ibus-chewing,a Chinese input method.
+,ibus,is a CJK input interface.
+,ibus-chewing,is a Chinese input method.
 ,ibus-rime,
-,ibus-anthy,a Japanese input method.
-,qutebrowser,The best browser out there.
+,ibus-anthy,is a Japanese input method.
+,qutebrowser,is the best browser out there.
 ,syncthing,
 ,rsync,
 ,entr,
-,texlive-most,
-,texlive-lang,
-,curl,
-,wget,
-,emacs,
-,gcc,
-,man,
+,texlive-most,tex patches
+,texlive-lang,tex patches.
+,curl,you curl what you curl.
+,wget,you get what you get.
+,emacs,is a nice user interface based on lisp.
 ,netctl,
 ,expect,
-,sshpass,
-,cronie,
-A,dropbox,
-A,htop-vim-git,
-,alacritty,
-,,
-,,
-,,
-,,
-,,
-,,
+,sshpass,helps inject password through ssh.
+,cronie,handles cronjobs.
+A,dropbox,is a thing I'd like to get rid of :'( ..
+A,htop-vim-git,is a better htop.
+,alacritty,is a stable terminal emulator.
