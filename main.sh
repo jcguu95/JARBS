@@ -30,7 +30,7 @@ getuserandpass() { \
 	echo "First, please enter a name for the user account."
 	read name || exit
 	while ! echo "$name" | grep -q "^[a-z_][a-z0-9_-]*$"; do
-		echo "Username not valid. Give a username beginning with a letter, with only lowercase letters, - or _." 10 60 3>&1 1>&2 2>&3 3>&1)
+		echo "Username not valid. Give a username beginning with a letter, with only lowercase letters, - or _."
 		read name || exit
 	done
 	echo "Enter a password for that user."
@@ -84,7 +84,7 @@ manualinstall() { # Installs $1 manually if not installed. Used only for AUR hel
 	cd /tmp || return) ;}
 
 maininstall() { # Installs all needed programs from main repo.
-	echo "Installing \`$1\` ($n of $total). $1 $2" 5 70
+	echo "Installing \`$1\` ($n of $total). $1 $2"
 	installpkg "$1"
 	}
 
