@@ -68,17 +68,6 @@ newperms() { # Set special sudoers settings for install (or after).
 	sed -i "/#JARBS/d" /etc/sudoers
 	echo "$* #JARBS" >> /etc/sudoers ;}
 
-manualinstall() { # Installs $1 manually if not installed. Used only for AUR helper here.
-	[ -f "/usr/bin/$1" ] || (
-	echo "Installing \"$1\", an AUR helper..."
-	cd /tmp || exit
-	rm -rf /tmp/"$1"*
-	curl -sO https://aur.archlinux.org/cgit/aur.git/snapshot/"$1".tar.gz &&
-	sudo -u "$name" tar -xvf "$1".tar.gz >/dev/null 2>&1 &&
-	cd "$1" &&
-	sudo -u "$name" makepkg --noconfirm -si >/dev/null 2>&1
-	cd /tmp || return) ;}
-
 maininstall() { # Installs all needed programs from main repo.
 	echo "Installing \`$1\` ($n of $total). $1 $2"
 	installpkg "$1"
@@ -132,6 +121,28 @@ putgitrepo() { # Downloads a gitrepo $1 and places the files in $2 only overwrit
 	sudo -u "$name" cp -rfT "$dir" "$2"
 	}
 
+#### SPECIAL INSTALL METHODS
+install_aurhelper() { # Installs $1 if not installed. Used only for AUR helper (e.g. yay) here.
+	[ -f "/usr/bin/$1" ] || (
+	echo "Installing \"$1\", an AUR helper..."
+	cd /tmp || exit
+	rm -rf /tmp/"$1"*
+	curl -sO https://aur.archlinux.org/cgit/aur.git/snapshot/"$1".tar.gz &&
+	sudo -u "$name" tar -xvf "$1".tar.gz >/dev/null 2>&1 &&
+	cd "$1" &&
+	sudo -u "$name" makepkg --noconfirm -si >/dev/null 2>&1
+	cd /tmp || return) ;}
+
+install_doomemacs() { # Installs doomemacs if not installed.
+	echo "Installing doomemacs, a greate emacs distribution..."
+	sudo -u "$name" git clone --depth 1 https://github.com/hlissner/doom-emacs /home/$name/emacs.d || exit
+	sudo -u "$name" yes | /home/$name/.emacs.d/bin/doom install ;}
+
+install_libxft-bgra() { # Installs libxft-bgra.
+	echo "Finally, installing \`libxft-bgra\` to enable color emoji in suckless software without crashes."
+	yes | sudo -u "$name" $aurhelper -S libxft-bgra-git >/dev/null 2>&1
+	}
+
 systembeepoff() { echo "Getting rid of that retarded error beep sound..."
 	rmmod pcspkr
 	echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf ;}
@@ -179,7 +190,7 @@ newperms "%wheel ALL=(ALL) NOPASSWD: ALL"
 # Use all cores for compilation.
 sed -i "s/-j2/-j$(nproc)/;s/^#MAKEFLAGS/MAKEFLAGS/" /etc/makepkg.conf
 
-manualinstall $aurhelper || error "Failed to install AUR helper."
+install_aurhelper $aurhelper || error "Failed to install AUR helper."
 
 # The command that does all the installing. Reads the progs.csv file and
 # installs each needed program the way required. Be sure to run this only after
@@ -188,8 +199,11 @@ manualinstall $aurhelper || error "Failed to install AUR helper."
 installationloop
 # Most packages are installed at this point. Below are some patches to the system.
 
-echo "Finally, installing \`libxft-bgra\` to enable color emoji in suckless software without crashes."
-yes | sudo -u "$name" $aurhelper -S libxft-bgra-git >/dev/null 2>&1
+# Install doomemacs
+install_doomemacs || error "Failed to install doomemacs."
+
+# Install libxft-bgra
+install_libxft-bgra || error "Failed to install ibxft-bgra."
 
 ## # Install the dotfiles in the plug directory
 ## plugdir="/home/$name/.+PLUGS"
