@@ -135,10 +135,10 @@ install_aurhelper() { # Installs $1 if not installed. Used only for AUR helper (
 
 install_doomemacs() { # Installs doomemacs if not installed.
 	echo "Installing doomemacs, a greate emacs distribution..."
-	sudo -u "$name" git clone --depth 1 https://github.com/hlissner/doom-emacs /home/$name/emacs.d || exit
-	sudo -u "$name" yes | /home/$name/.emacs.d/bin/doom install ;}
+	sudo -u "$name" git clone --depth 1 https://github.com/hlissner/doom-emacs /home/$name/.emacs.d || exit
+	/bin/su -c "yes | /home/$name/.emacs.d/bin/doom install" - $name ;}
 
-install_libxft-bgra() { # Installs libxft-bgra.
+install_libxft_bgra() { # Installs libxft-bgra.
 	echo "Finally, installing \`libxft-bgra\` to enable color emoji in suckless software without crashes."
 	yes | sudo -u "$name" $aurhelper -S libxft-bgra-git >/dev/null 2>&1
 	}
@@ -196,14 +196,14 @@ install_aurhelper $aurhelper || error "Failed to install AUR helper."
 # installs each needed program the way required. Be sure to run this only after
 # the user has been created and has priviledges to run sudo without a password
 # and all build dependencies are installed.
-installationloop
+####TEMPinstallationloop
 # Most packages are installed at this point. Below are some patches to the system.
 
 # Install doomemacs
 install_doomemacs || error "Failed to install doomemacs."
 
 # Install libxft-bgra
-install_libxft-bgra || error "Failed to install ibxft-bgra."
+####TEMPinstall_libxft_bgra || error "Failed to install ibxft-bgra."
 
 ## # Install the dotfiles in the plug directory
 ## plugdir="/home/$name/.+PLUGS"
