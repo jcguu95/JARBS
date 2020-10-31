@@ -23,7 +23,7 @@ esac done
 
 installpkg(){ pacman --noconfirm --needed -S "$1" >/dev/null 2>&1 ;}
 
-error() { clear; printf "ERROR:\\n%s\\n" "$1"; exit;}
+error() { printf "ERROR:\\n%s\\n" "$1"; exit;}
 
 getuserandpass() { \
 	# Prompts user for new username an password.
@@ -111,14 +111,15 @@ installationloop() { \
 		esac
 	done < /tmp/progs.csv ;}
 
-putgitrepo() { # Downloads a gitrepo $1 and places the files in $2 only overwriting conflicts
-	echo "Downloading and installing config files..."
-	[ -z "$3" ] && branch="master" || branch="$repobranch"
+putgitrepo() { # Downloads a gitrepo $1 with repobranch $2 and places the files in $3 only overwriting conflicts
+	echo "Downloading gitrepo $1 from repobranch $2 and installing to $3.."
+	echo "Account and password might be required."
+	[ -z "$2" ] && branch="master" || branch="$repobranch"
 	dir=$(mktemp -d)
-	[ ! -d "$2" ] && mkdir -p "$2"
-	chown -R "$name":wheel "$dir" "$2"
+	[ ! -d "$3" ] && mkdir -p "$3"
+	chown -R "$name":wheel "$dir" "$3"
 	sudo -u "$name" git clone --recursive -b "$branch" --depth 1 "$1" "$dir" >/dev/null 2>&1
-	sudo -u "$name" cp -rfT "$dir" "$2"
+	sudo -u "$name" cp -rfT "$dir" "$3"
 	}
 
 #### SPECIAL INSTALL METHODS
@@ -164,7 +165,7 @@ pacman --noconfirm --needed -Sy dialog || error "Are you sure you're running thi
 getuserandpass || error "User exited."
 
 # Give warning if user already exists.
-usercheck || error "User exited."
+usercheck || error "User exists. Exit with error."
 
 ### The rest of the script requires no user input.
 
@@ -179,6 +180,17 @@ done
 
 # Add a new user.
 adduserandpass || error "Error adding username and/or password."
+
+# Install the dotfiles in the plug directory
+plugdir="/home/$name/.+PLUGS"
+[ ! -d "$plugdir" ] && mkdir -p "$plugdir"
+tildedir="$plugdir/tilde-git"
+[ ! -d "$tildedir" ] && mkdir -p "$tildedir"
+putgitrepo "$dotfilesrepo" "$repobranch" "$tildedir" 
+/bin/su -c "cd "$tildedir"; zsh "$tildedir/linker"" - "$name"
+
+echo "pause"
+read pause
 
 # Backup pacnew
 [ -f /etc/sudoers.pacnew ] && cp /etc/sudoers.pacnew /etc/sudoers
@@ -196,25 +208,14 @@ install_aurhelper $aurhelper || error "Failed to install AUR helper."
 # installs each needed program the way required. Be sure to run this only after
 # the user has been created and has priviledges to run sudo without a password
 # and all build dependencies are installed.
-####TEMPinstallationloop
+installationloop
 # Most packages are installed at this point. Below are some patches to the system.
 
 # Install doomemacs
 install_doomemacs || error "Failed to install doomemacs."
 
 # Install libxft-bgra
-####TEMPinstall_libxft_bgra || error "Failed to install ibxft-bgra."
-
-## # Install the dotfiles in the plug directory
-## plugdir="/home/$name/.+PLUGS"
-## tildedir="$plugdir/tilde-git"
-## [ ! -d "$plugdir" ] && mkdir -p "$plugdir"
-## [ ! -d "$tildedir" ] && mkdir -p "$tildedir"
-## putgitrepo "$dotfilesrepo" "$tildedir" "$repobranch"
-## rm -rf "$tildedir/readme.md" "$tildedir/.git" "$tildedir/.gitignore"
-## for file in "$tildedir/*"; do ## ERROR: this does not expand as non-$user
-	## ln -sfv "$file" "/home/$name"
-## done
+install_libxft_bgra || error "Failed to install ibxft-bgra."
 
 # Most important command! Get rid of the beep!
 systembeepoff
