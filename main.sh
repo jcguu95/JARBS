@@ -69,7 +69,7 @@ newperms() { # Set special sudoers settings for install (or after).
 	echo "$* #JARBS" >> /etc/sudoers ;}
 
 maininstall() { # Installs all needed programs from main repo.
-	echo "Installing \`$1\` ($n of $total). $1 $2"
+	echo "Main install loop: ($n of $total) \`$1\`: $2"
 	installpkg "$1"
 	}
 
@@ -146,16 +146,21 @@ install_doomemacs() { # Installs doomemacs if not installed.
 	/bin/su -c "yes | /home/$name/.emacs.d/bin/doom sync" - $name && echo "done!" ;}
 
 install_libxft_bgra() { # Installs libxft-bgra.
-	echo "Finally, installing \`libxft-bgra\` to enable color emoji in suckless software without crashes."
+	echo "Installing \`libxft-bgra\` to enable color emoji in suckless software without crashes."
 	yes | sudo -u "$name" $aurhelper -S libxft-bgra-git >/dev/null 2>&1
 	}
+
+recompile_xmonad() { # Recomiles xmonad.
+	echo "Recompiling xmonad. This step may need xmonad configs put correctly under /home/$user."
+	/bin/su -c "xmonad --recompile" -- $user && echo "done!" || echo "WARNING: error while recompiling xmonad."
+	}	
 
 systembeepoff() { echo "Getting rid of that retarded error beep sound..."
 	rmmod pcspkr
 	echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf ;}
 
 finalize(){ \
-	echo "DONE!"
+	echo "ALL DONE!"
 	}
 
 
