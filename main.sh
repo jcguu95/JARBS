@@ -47,11 +47,7 @@ getuserandpass() { \
 
 usercheck() { \
 	! (id -u "$name" >/dev/null) 2>&1 ||
-	echo "The user \`$name\` already exists on this system. JARBS can install for a user already existing."
-	}
-
-preinstallmsg() { \
-	echo "The rest of the installation will now be totally automated." || { clear; exit; }
+	error "The user \`$name\` already exists on this system. JARBS can install for a user already existing. Exiting."
 	}
 
 adduserandpass() { \
@@ -118,10 +114,10 @@ installationloop() { \
 		n=$((n+1))
 		echo "$comment" | grep -q "^\".*\"$" && comment="$(echo "$comment" | sed "s/\(^\"\|\"$\)//g")"
 		case "$tag" in
+			"I") ;; ## Ignored. Do nothing.
 			"A") aurinstall "$program" "$comment" ;;
 			"G") gitmakeinstall "$program" "$comment" ;;
 			"P") pipinstall "$program" "$comment" ;;
-			"I") ;; ## Ignored. Do nothing.
 			*) maininstall "$program" "$comment" ;;
 		esac
 	done < /tmp/progs.csv ;}
@@ -141,7 +137,7 @@ systembeepoff() { echo "Getting rid of that retarded error beep sound..."
 	echo "blacklist pcspkr" > /etc/modprobe.d/nobeep.conf ;}
 
 finalize(){ \
-	echo "Done!"
+	echo "DONE!"
 	}
 
 
@@ -159,9 +155,6 @@ getuserandpass || error "User exited."
 # Give warning if user already exists.
 usercheck || error "User exited."
 
-# Last chance for user to back out before install.
-preinstallmsg || error "User exited."
-
 ### The rest of the script requires no user input.
 
 # Refresh Arch keyrings.
@@ -176,8 +169,8 @@ done
 # Add a new user.
 adduserandpass || error "Error adding username and/or password."
 
-# TODO ???
-[ -f /etc/sudoers.pacnew ] && cp /etc/sudoers.pacnew /etc/sudoers # Just in case
+# Backup pacnew
+[ -f /etc/sudoers.pacnew ] && cp /etc/sudoers.pacnew /etc/sudoers
 
 # Allow user to run sudo without password. Since AUR programs must be installed
 # in a fakeroot environment, this is required for all builds with AUR.
