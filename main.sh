@@ -136,9 +136,14 @@ install_aurhelper() { # Installs $1 if not installed. Used only for AUR helper (
 	cd /tmp || return) ;}
 
 install_doomemacs() { # Installs doomemacs if not installed.
-	echo "Installing doomemacs, a greate emacs distribution..."
-	sudo -u "$name" git clone --depth 1 https://github.com/hlissner/doom-emacs /home/$name/.emacs.d || exit
-	/bin/su -c "yes | /home/$name/.emacs.d/bin/doom install" - $name ;}
+	echo "Installation of doomemacs, a great emacs distribution..."
+        doomemacs_repo="https://github.com/hlissner/doom-emacs"
+	echo "Pulling source from $doomemacs_repo..."
+	sudo -u "$name" git clone --depth 1 "$doomemacs_repo" /home/$name/.emacs.d && echo "done!" || exit
+	echo "Installing doomemacs..."
+	/bin/su -c "yes | /home/$name/.emacs.d/bin/doom install" - $name && echo "done!"
+	echo "Syncing doomemacs with configs..."
+	/bin/su -c "yes | /home/$name/.emacs.d/bin/doom sync" - $name && echo "done!" ;}
 
 install_libxft_bgra() { # Installs libxft-bgra.
 	echo "Finally, installing \`libxft-bgra\` to enable color emoji in suckless software without crashes."
@@ -167,8 +172,8 @@ refreshkeys || error "Error automatically refreshing Arch keyring. Consider doin
 
 # Get packages for installing and configuring other programs.
 for x in curl base-devel git ntp zsh; do
-	echo "Installing \`x\` which is required to install and configure other programs."
-	installpkg "$x"
+	echo "Installing \`$x\` which is required to install and configure other programs."
+	installpkg "$x" && echo "done!"
 done
 
 # Get and verify username and password.
@@ -211,10 +216,10 @@ installationloop
 # Most packages are installed at this point. Below are some patches to the system.
 
 # Install doomemacs
-install_doomemacs || error "Failed to install doomemacs."
+install_doomemacs && echo "Finished installing doomemacs!" || error "Failed to install doomemacs."
 
 # Install libxft-bgra
-install_libxft_bgra || error "Failed to install ibxft-bgra."
+install_libxft_bgra && echo "Finished installing libxft-bgra!" || error "Failed to install ibxft-bgra."
 
 # Most important command! Get rid of the beep!
 systembeepoff
@@ -247,4 +252,5 @@ newperms "%wheel ALL=(ALL) ALL #JARBS
 
 # Last message! Install complete!
 finalize
-clear
+
+exit
