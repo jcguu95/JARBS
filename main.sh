@@ -26,22 +26,22 @@ installpkg(){ pacman --noconfirm --needed -S "$1" >/dev/null 2>&1 ;}
 error() { printf "ERROR:\\n%s\\n" "$1"; exit;}
 
 getuserandpass() { \
-	# Prompts user for new username an password.
-	echo "First, please enter a name for the user account."
+	echo -e "\nPrompts user for new username an password."
+	echo "Enter a name for the user account:"
 	read name || exit
 	while ! echo "$name" | grep -q "^[a-z_][a-z0-9_-]*$"; do
-		echo "Username not valid. Give a username beginning with a letter, with only lowercase letters, - or _."
+		echo "Username not valid. Give a username beginning with a letter, with only lowercase letters, - or _:"
 		read name || exit
 	done
-	echo "Enter a password for that user."
+	echo "Enter a password for that user:"
 	read -s pass1 || exit
-	echo "Retype password."
+	echo "Retype password:"
 	read -s pass2 || exit
 	while ! [ "$pass1" = "$pass2" ]; do
 		unset pass2
-		echo "Passwords do not match. Enter password again."
+		echo "Passwords do not match. Enter password again:"
 		read -s pass1 || exit
-		echo "Retype password."
+		echo "Retype password:"
 		read -s pass2 || exit
 	done ;}
 
@@ -52,7 +52,7 @@ usercheck() { \
 
 adduserandpass() { \
 	# Adds user `$name` with password $pass1.
-	echo "Adding user \"$name\"..."
+	echo -e "\nAdding user \"$name\"..."
 	useradd -m -g wheel -s /bin/zsh "$name" >/dev/null 2>&1 ||
 	usermod -a -G wheel "$name" && mkdir -p /home/"$name" && chown "$name":wheel /home/"$name"
 	repodir="/home/$name/.local/src"; mkdir -p "$repodir"; chown -R "$name":wheel "$(dirname "$repodir")"
@@ -60,7 +60,7 @@ adduserandpass() { \
 	unset pass1 pass2 ;}
 
 refreshkeys() { \
-	echo "Refreshing Arch Keyring..."
+	echo -e "\nRefreshing Arch Keyring..."
 	pacman --noconfirm -S archlinux-keyring >/dev/null 2>&1
 	}
 
@@ -112,9 +112,10 @@ installationloop() { \
 	done < /tmp/progs.csv ;}
 
 putgitrepo() { # Downloads a gitrepo $1 with repobranch $2 and places the files in $3 only overwriting conflicts
-	echo "Downloading gitrepo $1 from repobranch $2 and installing to $3.."
-	echo "Account and password might be required."
 	[ -z "$2" ] && branch="master" || branch="$repobranch"
+	echo -e "\nPutting configs.."
+	echo "Downloading gitrepo $1 from repobranch $2 and installing to $3.."
+	echo "  (account and password might be required)"
 	dir=$(mktemp -d)
 	[ ! -d "$3" ] && mkdir -p "$3"
 	chown -R "$name":wheel "$dir" "$3"
@@ -161,14 +162,6 @@ finalize(){ \
 # Check if user is root on Arch distro. Install dialog.
 pacman --noconfirm --needed -Sy dialog || error "Are you sure you're running this as the root user, are on an Arch-based distribution and have an internet connection?"
 
-# Get and verify username and password.
-getuserandpass || error "User exited."
-
-# Give warning if user already exists.
-usercheck || error "User exists. Exit with error."
-
-### The rest of the script requires no user input.
-
 # Refresh Arch keyrings.
 refreshkeys || error "Error automatically refreshing Arch keyring. Consider doing so manually."
 
@@ -178,8 +171,16 @@ for x in curl base-devel git ntp zsh; do
 	installpkg "$x"
 done
 
+# Get and verify username and password.
+getuserandpass || error "User exited."
+
+# Give warning if user already exists.
+usercheck || error "User exists. Exit with error."
+
+### The rest of the script requires no user input.
+
 # Add a new user.
-adduserandpass || error "Error adding username and/or password."
+adduserandpass && echo "done!" || error "Error adding username and/or password."
 
 # Install the dotfiles in the plug directory
 plugdir="/home/$name/.+PLUGS"
@@ -187,10 +188,8 @@ plugdir="/home/$name/.+PLUGS"
 tildedir="$plugdir/tilde-git"
 [ ! -d "$tildedir" ] && mkdir -p "$tildedir"
 putgitrepo "$dotfilesrepo" "$repobranch" "$tildedir" 
+echo "Running \"symlinker\" in the repo."
 /bin/su -c "cd "$tildedir"; zsh "$tildedir/linker"" - "$name"
-
-echo "pause"
-read pause
 
 # Backup pacnew
 [ -f /etc/sudoers.pacnew ] && cp /etc/sudoers.pacnew /etc/sudoers
