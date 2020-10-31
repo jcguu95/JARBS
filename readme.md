@@ -6,5 +6,5 @@ sh ./main.sh
 
 ### TODOs
 
-+ [ ] Separate user creation, installation, and post-installation cycles.
-+ [ ] Add emacs and its packages.
++ [ ] Break installation into phases. Inform user what the script is going to
+  do next, and ask for permission before proceeding.
