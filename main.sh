@@ -145,6 +145,14 @@ install_doomemacs() { # Installs doomemacs if not installed.
 	echo "Syncing doomemacs with configs..."
 	/bin/su -c "yes | /home/$name/.emacs.d/bin/doom sync" - $name && echo "done!" ;}
 
+install_curfew() { # Installs my curfew script <- WARNING: this runs every 5 seconds!
+	# TODO: to test
+	echo "Installs my curfew script <- WARNING: this runs every 5 seconds!"
+	curfew_repo="https://github.com/jcguu95/curfew"
+	putgitrepo "$curfew_repo" "$master" "/root"
+	sh /root/curfew/install
+	}
+
 install_libxft_bgra() { # Installs libxft-bgra.
 	echo "Installing \`libxft-bgra\` to enable color emoji in suckless software without crashes."
 	yes | sudo -u "$name" $aurhelper -S libxft-bgra-git >/dev/null 2>&1
@@ -153,7 +161,7 @@ install_libxft_bgra() { # Installs libxft-bgra.
 recompile_xmonad() { # Recomiles xmonad.
 	echo "Recompiling xmonad. This step may need xmonad configs put correctly under /home/$user."
 	/bin/su -c "xmonad --recompile" -- $user && echo "done!" || echo "WARNING: error while recompiling xmonad."
-	}	
+	}
 
 systembeepoff() { echo "Getting rid of that retarded error beep sound..."
 	rmmod pcspkr
@@ -197,7 +205,7 @@ plugdir="/home/$name/.+PLUGS"
 [ ! -d "$plugdir" ] && mkdir -p "$plugdir"
 tildedir="$plugdir/tilde-git"
 [ ! -d "$tildedir" ] && mkdir -p "$tildedir"
-putgitrepo "$dotfilesrepo" "$repobranch" "$tildedir" 
+putgitrepo "$dotfilesrepo" "$repobranch" "$tildedir"
 echo "Running \"symlinker\" in the repo."
 /bin/su -c "cd "$tildedir"; zsh "$tildedir/linker"" - "$name"
 
@@ -222,6 +230,9 @@ installationloop
 
 # Install doomemacs
 install_doomemacs && echo "Finished installing doomemacs!" || error "Failed to install doomemacs."
+
+# Install doomemacs
+install_curfew && echo "Finished installing curfew!" || error "Failed to install curfew."
 
 # Install libxft-bgra
 install_libxft_bgra && echo "Finished installing libxft-bgra!" || error "Failed to install ibxft-bgra."
