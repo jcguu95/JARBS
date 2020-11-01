@@ -146,10 +146,9 @@ install_doomemacs() { # Installs doomemacs if not installed.
 	/bin/su -c "yes | /home/$name/.emacs.d/bin/doom sync" - $name && echo "done!" ;}
 
 install_curfew() { # Installs my curfew script <- WARNING: this runs every 5 seconds!
-	# TODO: to test
 	echo "Installs my curfew script <- WARNING: this runs every 5 seconds!"
 	curfew_repo="https://github.com/jcguu95/curfew"
-	putgitrepo "$curfew_repo" "$master" "/root"
+	putgitrepo "$curfew_repo" "$master" "/root/curfew"
 	sh /root/curfew/install
 	}
 
