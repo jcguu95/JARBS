@@ -119,7 +119,7 @@ putgitrepo() { # Downloads a gitrepo $1 with repobranch $2 and places the files 
 	dir=$(mktemp -d)
 	[ ! -d "$3" ] && mkdir -p "$3"
 	chown -R "$name":wheel "$dir" "$3"
-	sudo -u "$name" git clone --recursive -b "$branch" --depth 1 "$1" "$dir" >/dev/null 2>&1
+	sudo -u "$name" git clone --recursive --recurse-submodules -b "$branch" --depth 1 "$1" "$dir" >/dev/null 2>&1 # TODO not tested
 	sudo -u "$name" cp -rfT "$dir" "$3"
 	}
 
