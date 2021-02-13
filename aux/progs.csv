@@ -88,3 +88,5 @@ I,xmobar,is a nice bar manager that does well with xmonad.
 ,feh,displays wallpaper.
 ,fd,is a replacement of `find`.
 ,ripgrep,is a faster `grep`.
+A,libfixposix,a patch for a cl library iolib.
+,stow,nice config helper
