@@ -230,8 +230,8 @@ installationloop
 # Install doomemacs
 install_doomemacs && echo "Finished installing doomemacs!" || error "Failed to install doomemacs."
 
-# Install doomemacs
-install_curfew && echo "Finished installing curfew!" || error "Failed to install curfew."
+## # Install curfew
+## install_curfew && echo "Finished installing curfew!" || error "Failed to install curfew."
 
 # Install libxft-bgra
 install_libxft_bgra && echo "Finished installing libxft-bgra!" || error "Failed to install ibxft-bgra."

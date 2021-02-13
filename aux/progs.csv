@@ -21,7 +21,7 @@ A,gtk-theme-arc-gruvbox-git,gives the dark GTK theme used in LARBS.
 ,mpv,is the patrician's choice video player.
 ,man-db,lets you read man pages of programs.
 ,noto-fonts-emoji,is an emoji font.
-,ntfs-3g,allows accessing NTFS partitions.
+I,ntfs-3g,allows accessing NTFS partitions.
 ,pulseaudio-alsa,is the audio system.
 ,pulsemixer,is an audio controler.
 ,pamixer,is a command-line audio interface.
@@ -54,7 +54,7 @@ G,https://github.com/lukesmithxyz/st.git,is my custom build of suckless's termin
 G,https://github.com/lukesmithxyz/dwm.git,is the window manager.
 I,https://github.com/b4b4r07/gomi.git,is a better trash cli.
 A,mutt-wizard-git,is a light-weight terminal-based email system.
-,slock,"allows you to lock your computer, and quickly unlock with your password."
+,slock,screen locker
 ,terminus-font,The best font.
 ,ttf-roboto,A font.
 ,ttf-dejavu,A font.
@@ -65,7 +65,7 @@ A,mutt-wizard-git,is a light-weight terminal-based email system.
 ,ibus,is a CJK input interface.
 ,ibus-chewing,is a Chinese input method.
 ,ibus-rime,
-,ibus-anthy,is a Japanese input method.
+I,ibus-anthy,is a Japanese input method.
 ,qutebrowser,is the best browser out there.
 ,syncthing,
 ,rsync,
@@ -82,9 +82,9 @@ A,mutt-wizard-git,is a light-weight terminal-based email system.
 A,dropbox,is a thing I'd like to get rid of :'( ..
 A,htop-vim-git,is a better htop.
 ,alacritty,is a stable terminal emulator.
-,xmonad,is a nice window manager.
-,xmonad-contrib,patches xmonad.
-,xmobar,is a nice bar manager that does well with xmonad.
+I,xmonad,is a nice window manager.
+I,xmonad-contrib,patches xmonad.
+I,xmobar,is a nice bar manager that does well with xmonad.
 ,feh,displays wallpaper.
 ,fd,is a replacement of `find`.
 ,ripgrep,is a faster `grep`.
